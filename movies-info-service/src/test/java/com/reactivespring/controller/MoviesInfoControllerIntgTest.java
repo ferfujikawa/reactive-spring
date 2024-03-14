@@ -1,6 +1,7 @@
 package com.reactivespring.controller;
 
-import java.net.URI;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -87,5 +88,23 @@ public class MoviesInfoControllerIntgTest {
             .is2xxSuccessful()
             .expectBodyList(MovieInfo.class)
             .hasSize(3);
+    }
+
+    @Test
+    void getMovieInfoById() {
+        
+        String movieInfoId = "abc";
+        webTestClient
+            .get()
+            .uri(MOVIES_INFO_URL + "/{id}", movieInfoId)
+            .exchange()
+            .expectStatus()
+            .is2xxSuccessful()
+            .expectBody()
+            .jsonPath("$.name").isEqualTo("Dark Knight Rises");
+            // .consumeWith(movieInfoEntityExchangeResult -> {
+            //     MovieInfo moveiInfo = movieInfoEntityExchangeResult.getResponseBody();
+            //     assertNotNull(moveiInfo);
+            // });
     }
 }

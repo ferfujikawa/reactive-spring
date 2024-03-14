@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,6 +31,12 @@ public class MoviesInfoController {
     public Flux<MovieInfo> getAllMovieInfos() {
         
         return moviesInfoService.getAllMovieInfos();
+    }
+
+    @GetMapping("/movieinfos/{id}")
+    public Mono<MovieInfo> getMovieInfoById(@PathVariable String id) {
+        
+        return moviesInfoService.getMovieInfoById(id);
     }
 
     @PostMapping("/movieinfos")
