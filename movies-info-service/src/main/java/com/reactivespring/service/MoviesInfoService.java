@@ -27,4 +27,9 @@ public class MoviesInfoService {
         return movieInfoRepository.findAll();
     }
 
+    public Mono<MovieInfo> getMovieInfoById(String id) {
+        
+        return movieInfoRepository.findById(id);
+    }
+
 }
