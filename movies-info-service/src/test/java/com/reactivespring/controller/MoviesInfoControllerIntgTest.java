@@ -1,6 +1,6 @@
 package com.reactivespring.controller;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -106,5 +106,48 @@ public class MoviesInfoControllerIntgTest {
             //     MovieInfo moveiInfo = movieInfoEntityExchangeResult.getResponseBody();
             //     assertNotNull(moveiInfo);
             // });
+    }
+
+    @Test
+    void updateMovieInfo() {
+
+        //given
+        String moveiInfoId = "abc";
+        MovieInfo movieInfo = new MovieInfo(null, "Dark Knight Rises1",
+                        2005, Arrays.asList("Christian Bale", "Michael Cane"), LocalDate.parse("2005-06-15"));
+
+        //when
+        webTestClient
+            .put()
+            .uri(MOVIES_INFO_URL + "/{id}", moveiInfoId)
+            .bodyValue(movieInfo)
+            .exchange()
+            .expectStatus()
+            .is2xxSuccessful()
+            .expectBody(MovieInfo.class)
+            .consumeWith(movieInfoEntityExchangeResult -> {
+
+                MovieInfo updatedMovieInfo = movieInfoEntityExchangeResult.getResponseBody();
+                assert updatedMovieInfo!=null;
+                assert updatedMovieInfo.getMovieInfoId()!=null;
+                assertEquals("Dark Knight Rises1", updatedMovieInfo.getName());
+            });
+
+        //then
+    }
+
+    @Test
+    void deleteMovieInfo() {
+
+        //given
+        String movieInfoId = "abc";
+
+        //when
+        webTestClient
+            .delete()
+            .uri(MOVIES_INFO_URL + "/{id}", movieInfoId)
+            .exchange()
+            .expectStatus()
+            .isNoContent();
     }
 }
