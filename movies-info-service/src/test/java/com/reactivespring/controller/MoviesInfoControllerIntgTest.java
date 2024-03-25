@@ -170,4 +170,16 @@ public class MoviesInfoControllerIntgTest {
 
         //then
     }
+
+    @Test
+    void getMovieInfoById_notfound() {
+        
+        String movieInfoId = "def";
+        webTestClient
+            .get()
+            .uri(MOVIES_INFO_URL + "/{id}", movieInfoId)
+            .exchange()
+            .expectStatus()
+            .isNotFound();
+    }
 }
