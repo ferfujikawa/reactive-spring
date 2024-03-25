@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,9 +52,12 @@ public class MoviesInfoController {
     }
 
     @PutMapping("/movieinfos/{id}")
-    public Mono<MovieInfo> updateMovieInfo(@RequestBody MovieInfo updatedMovieInfo, @PathVariable String id) {
+    public Mono<ResponseEntity<MovieInfo>> updateMovieInfo(@RequestBody MovieInfo updatedMovieInfo, @PathVariable String id) {
         
-        return moviesInfoService.updateMovieInfo(updatedMovieInfo, id);
+        return moviesInfoService.updateMovieInfo(updatedMovieInfo, id)
+            .map(ResponseEntity.ok()::body)
+            .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()))
+            .log();
     }
 
     @DeleteMapping("/movieinfos/{id}")
