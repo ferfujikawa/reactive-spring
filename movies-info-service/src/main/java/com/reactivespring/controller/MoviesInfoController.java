@@ -11,9 +11,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -45,5 +47,17 @@ public class MoviesInfoController {
         
         return moviesInfoService.addMovieInfo(movieInfo).log();
     }
-    
+
+    @PutMapping("/movieinfos/{id}")
+    public Mono<MovieInfo> updateMovieInfo(@RequestBody MovieInfo updatedMovieInfo, @PathVariable String id) {
+        
+        return moviesInfoService.updateMovieInfo(updatedMovieInfo, id);
+    }
+
+    @DeleteMapping("/movieinfos/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> deleteMovieInfo(@PathVariable String id) {
+        
+        return moviesInfoService.deleteMovieInfo(id);
+    }
 }
