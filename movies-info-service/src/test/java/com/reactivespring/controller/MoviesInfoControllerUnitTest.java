@@ -161,7 +161,7 @@ public class MoviesInfoControllerUnitTest {
 
         //given
         MovieInfo movieInfo = new MovieInfo(null, "",
-            -2005, Arrays.asList("Christian Bale", "Michael Cane"), LocalDate.parse("2005-06-15"));
+            -2005, Arrays.asList(""), LocalDate.parse("2005-06-15"));
 
         //when
         webTestClient
@@ -175,7 +175,7 @@ public class MoviesInfoControllerUnitTest {
             .consumeWith(stringEntityExchangeResult -> {
 
                 String responseBody = stringEntityExchangeResult.getResponseBody();
-                String expectedErrorMessage = "movieInfo.name must be present,movieInfo.year must be a Positive value";
+                String expectedErrorMessage = "movieInfo.cast must be present,movieInfo.name must be present,movieInfo.year must be a Positive value";
                 assertEquals(expectedErrorMessage, responseBody);
             });
 
