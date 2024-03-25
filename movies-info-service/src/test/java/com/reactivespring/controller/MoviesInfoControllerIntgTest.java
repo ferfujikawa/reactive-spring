@@ -112,14 +112,14 @@ public class MoviesInfoControllerIntgTest {
     void updateMovieInfo() {
 
         //given
-        String moveiInfoId = "abc";
+        String movieInfoId = "abc";
         MovieInfo movieInfo = new MovieInfo(null, "Dark Knight Rises1",
                         2005, Arrays.asList("Christian Bale", "Michael Cane"), LocalDate.parse("2005-06-15"));
 
         //when
         webTestClient
             .put()
-            .uri(MOVIES_INFO_URL + "/{id}", moveiInfoId)
+            .uri(MOVIES_INFO_URL + "/{id}", movieInfoId)
             .bodyValue(movieInfo)
             .exchange()
             .expectStatus()
@@ -149,5 +149,25 @@ public class MoviesInfoControllerIntgTest {
             .exchange()
             .expectStatus()
             .isNoContent();
+    }
+
+    @Test
+    void updateMovieInfo_notfound() {
+
+        //given
+        String movieInfoId = "def";
+        MovieInfo movieInfo = new MovieInfo(null, "Dark Knight Rises1",
+                        2005, Arrays.asList("Christian Bale", "Michael Cane"), LocalDate.parse("2005-06-15"));
+
+        //when
+        webTestClient
+            .put()
+            .uri(MOVIES_INFO_URL + "/{id}", movieInfoId)
+            .bodyValue(movieInfo)
+            .exchange()
+            .expectStatus()
+            .isNotFound();
+
+        //then
     }
 }
