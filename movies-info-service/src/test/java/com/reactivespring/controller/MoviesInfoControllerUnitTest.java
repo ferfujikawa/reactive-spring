@@ -155,4 +155,30 @@ public class MoviesInfoControllerUnitTest {
             .expectStatus()
             .isNoContent();
     }
+
+    @Test
+    void addMovieInfo_validation() {
+
+        //given
+        MovieInfo movieInfo = new MovieInfo(null, "",
+            -2005, Arrays.asList("Christian Bale", "Michael Cane"), LocalDate.parse("2005-06-15"));
+
+        //when
+        webTestClient
+            .post()
+            .uri(MOVIES_INFO_URL)
+            .bodyValue(movieInfo)
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody(String.class)
+            .consumeWith(stringEntityExchangeResult -> {
+
+                String responseBody = stringEntityExchangeResult.getResponseBody();
+                String expectedErrorMessage = "movieInfo.name must be present,movieInfo.year must be a Positive value";
+                assertEquals(expectedErrorMessage, responseBody);
+            });
+
+        //then
+    }
 }
