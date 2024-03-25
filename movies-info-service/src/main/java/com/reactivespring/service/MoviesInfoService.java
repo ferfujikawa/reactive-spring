@@ -49,4 +49,9 @@ public class MoviesInfoService {
         return movieInfoRepository.deleteById(id);
     }
 
+    public Flux<MovieInfo> getMovieInfoByYear(Integer year) {
+        
+        return movieInfoRepository.findByYear(year);
+    }
+
 }
