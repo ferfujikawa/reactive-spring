@@ -1,20 +1,32 @@
 package com.reactivespring.handler;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import com.reactivespring.domain.Review;
+import com.reactivespring.exception.ReviewDataException;
 import com.reactivespring.repository.ReviewReactiveRepository;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
+@Slf4j
 public class ReviewHandler {
+
+    @Autowired
+    private Validator validator;
 
     private ReviewReactiveRepository reviewReactiveRepository;
 
@@ -25,6 +37,7 @@ public class ReviewHandler {
     public Mono<ServerResponse> addReview(ServerRequest request) {
         
         return request.bodyToMono(Review.class)
+            .doOnNext(this::validate)
             .flatMap(reviewReactiveRepository::save)
             .flatMap(ServerResponse.status(HttpStatus.CREATED)::bodyValue);
     }
@@ -74,5 +87,20 @@ public class ReviewHandler {
             .flatMap(review -> reviewReactiveRepository
                 .deleteById(reviewId)
                 .then(ServerResponse.noContent().build()));
+    }
+
+    private void validate(Review review) {
+
+        Set<ConstraintViolation<Review>> constraintViolations = validator.validate(review);
+        log.info("constraintViolations : {} ", constraintViolations);
+        if(constraintViolations.size() > 0) {
+            String errorMessage = constraintViolations
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .sorted()
+                .collect(Collectors.joining(","));
+
+            throw new ReviewDataException(errorMessage);
+        }
     }
 }
