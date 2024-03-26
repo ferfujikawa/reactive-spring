@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import com.reactivespring.domain.Review;
 import com.reactivespring.repository.ReviewReactiveRepository;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -26,4 +27,9 @@ public class ReviewHandler {
             .flatMap(ServerResponse.status(HttpStatus.CREATED)::bodyValue);
     }
 
+    public Mono<ServerResponse> getReviews(ServerRequest request) {
+        
+        Flux<Review> reviewsFlux = reviewReactiveRepository.findAll();
+        return ServerResponse.ok().body(reviewsFlux, Review.class);
+    }
 }
