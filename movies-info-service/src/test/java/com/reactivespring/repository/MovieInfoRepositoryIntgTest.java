@@ -141,4 +141,20 @@ public class MovieInfoRepositoryIntgTest {
             .expectNextCount(1)
             .verifyComplete();
     }
+
+    @Test
+    void findByName() {
+        
+        //given
+
+        //when
+        Mono<MovieInfo> moviesInfoMono = movieInfoRepository.findOneByName("Dark Knight Rises").log();
+
+        //then
+        StepVerifier.create(moviesInfoMono)
+            .assertNext(movieInfo -> {
+                assertEquals("Dark Knight Rises", movieInfo.getName());
+            })
+            .verifyComplete();
+    }
 }
