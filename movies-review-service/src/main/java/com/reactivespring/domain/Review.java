@@ -1,4 +1,4 @@
-package com.reactivespring.moviesreviewservice.domain;
+package com.reactivespring.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

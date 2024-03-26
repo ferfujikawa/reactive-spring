@@ -1,4 +1,4 @@
-package com.reactivespring.moviesreviewservice.exception;
+package com.reactivespring.exception;
 
 public class ReviewDataException extends RuntimeException {
 
