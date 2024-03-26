@@ -14,5 +14,6 @@
 
 	<modules>
 		<module>movies-info-service</module>
+		<module>movies-review-service</module>
 	</modules>
 </project>
