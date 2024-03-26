@@ -1,5 +1,7 @@
 package com.reactivespring.handler;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -29,7 +31,18 @@ public class ReviewHandler {
 
     public Mono<ServerResponse> getReviews(ServerRequest request) {
         
-        Flux<Review> reviewsFlux = reviewReactiveRepository.findAll();
+        Optional<String> movieInfoId = request.queryParam("movieInfoId");
+
+        if (movieInfoId.isPresent()) {
+            Flux<Review> reviewsFlux = reviewReactiveRepository.findReviewsByMovieInfoId(Long.valueOf(movieInfoId.get()));
+            return buildReviewsResponse(reviewsFlux);
+        } else {
+            Flux<Review> reviewsFlux = reviewReactiveRepository.findAll();
+            return buildReviewsResponse(reviewsFlux);
+        }
+    }
+
+    private Mono<ServerResponse> buildReviewsResponse(Flux<Review> reviewsFlux) {
         return ServerResponse.ok().body(reviewsFlux, Review.class);
     }
 
