@@ -1,6 +1,19 @@
 spring:
     application:
         name: movies-review-service
-
+    profiles:
+        active: local
+---
+spring:
+    config:
+        activate:
+            on-profile:
+                - local
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            database: local
+            
 server:
     port: 8081
