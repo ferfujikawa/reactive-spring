@@ -7,7 +7,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 import com.reactivespring.handler.ReviewHandler;
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE;
 import static org.springframework.web.reactive.function.server.RequestPredicates.path;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
