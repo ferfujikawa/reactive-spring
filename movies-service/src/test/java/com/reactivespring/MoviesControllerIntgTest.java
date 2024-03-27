@@ -115,4 +115,26 @@ public class MoviesControllerIntgTest {
                 assertEquals("Batman Begins", movie.getMovieInfo().getName());
             });
     }
+
+    @Test
+    void retrieveMovieById_5XX() {
+
+        //given
+        String movieId = "abc";
+
+        stubFor(get(urlEqualTo("/v1/movieinfos/" + movieId))
+            .willReturn(aResponse()
+                .withStatus(500)
+                .withBody("MovieInfo Service Unavailable")));
+        
+        //when
+        webTestClient
+            .get()
+            .uri("/v1/movies/{id}", movieId)
+            .exchange()
+            .expectStatus()
+            .is5xxServerError()
+            .expectBody(String.class)
+            .isEqualTo("Server Exception in MoviesInfoService MovieInfo Service Unavailable");
+    }
 }
