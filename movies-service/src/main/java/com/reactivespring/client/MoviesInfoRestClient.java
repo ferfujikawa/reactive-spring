@@ -1,5 +1,7 @@
 package com.reactivespring.client;
 
+import java.time.Duration;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -10,7 +12,10 @@ import com.reactivespring.exception.MovieInfoClientException;
 import com.reactivespring.exception.MoviesInfoServerException;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.Exceptions;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
+import reactor.util.retry.RetryBackoffSpec;
 
 @Component
 @Slf4j
@@ -28,6 +33,10 @@ public class MoviesInfoRestClient {
     public Mono<MovieInfo> retrieMovieInfo(String movieId) {
         
         String url = moviiesInfoUrl.concat("/{id}");
+        RetryBackoffSpec retrySpec = Retry.fixedDelay(3, Duration.ofSeconds(1))
+            .filter(ex -> ex instanceof MoviesInfoServerException)
+            .onRetryExhaustedThrow((retryBackoffSpec, retrySignal) -> Exceptions.propagate(retrySignal.failure()));
+
         return webClient
             .get()
             .uri(url, movieId)
@@ -56,7 +65,7 @@ public class MoviesInfoRestClient {
                     });
             })
             .bodyToMono(MovieInfo.class)
-            .retry(3)
+            .retryWhen(retrySpec)
             .log();
     }
 }

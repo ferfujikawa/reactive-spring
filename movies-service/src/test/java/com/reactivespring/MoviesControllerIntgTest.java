@@ -87,6 +87,8 @@ public class MoviesControllerIntgTest {
             .is4xxClientError()
             .expectBody(String.class)
             .isEqualTo("There is no MovieInfo Available for the passed Id : abc");
+
+        WireMock.verify(1, getRequestedFor(urlEqualTo("/v1/movieinfos/" + movieId)));
     }
 
     @Test
