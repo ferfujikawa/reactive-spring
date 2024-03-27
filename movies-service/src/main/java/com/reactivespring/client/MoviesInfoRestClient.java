@@ -11,6 +11,7 @@ import com.reactivespring.exception.MoviesInfoServerException;
 import com.reactivespring.util.RetryUtil;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -20,7 +21,7 @@ public class MoviesInfoRestClient {
     private WebClient webClient;
 
     @Value("${restClient.moviesInfoUrl}")
-    private String moviiesInfoUrl;
+    private String moviesInfoUrl;
 
     public MoviesInfoRestClient(WebClient webClient) {
         this.webClient = webClient;
@@ -28,7 +29,7 @@ public class MoviesInfoRestClient {
 
     public Mono<MovieInfo> retrieMovieInfo(String movieId) {
         
-        String url = moviiesInfoUrl.concat("/{id}");
+        String url = moviesInfoUrl.concat("/{id}");
         
         return webClient
             .get()
@@ -58,6 +59,37 @@ public class MoviesInfoRestClient {
                     });
             })
             .bodyToMono(MovieInfo.class)
+            .retryWhen(RetryUtil.retrySpec())
+            .log();
+    }
+
+    public Flux<MovieInfo> retrieMovieInfoStream() {
+        
+        String url = moviesInfoUrl.concat("/stream");
+
+        return webClient
+            .get()
+            .uri(url)
+            .retrieve()
+            .onStatus(HttpStatus::is4xxClientError, clientResponse -> {
+
+                log.info("Status code is : {}", clientResponse.statusCode().value());
+             
+                return clientResponse.bodyToMono(String.class)
+                    .flatMap(responseMessage -> {
+                        return Mono.error(new MovieInfoClientException(responseMessage, clientResponse.statusCode().value()));
+                    });
+            })
+            .onStatus(HttpStatus::is5xxServerError, clientResponse -> {
+
+                log.info("Status code is : {}", clientResponse.statusCode().value());
+                
+                return clientResponse.bodyToMono(String.class)
+                    .flatMap(responseMessage -> {
+                        return Mono.error(new MoviesInfoServerException("Server Exception in MoviesInfoService " + responseMessage));
+                    });
+            })
+            .bodyToFlux(MovieInfo.class)
             .retryWhen(RetryUtil.retrySpec())
             .log();
     }
