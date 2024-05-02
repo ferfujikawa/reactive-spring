@@ -1,0 +1,44 @@
+services:
+    movies-mongodb:
+        image: mongodb/mongodb-community-server:6.0-ubi8
+        ports:
+            - 27017:27017
+        container_name: movies-mongodb
+    
+    movies-info-service:
+        build:
+            dockerfile: ./Dockerfile
+            context: ./movies-info-service
+        ports:
+            - 8080:8080
+        environment:
+            - MONGODB_HOST=movies-mongodb
+        container_name: movies-info-service
+        depends_on:
+            - movies-mongodb
+    
+    movies-review-service:
+        build:
+            dockerfile: ./Dockerfile
+            context: ./movies-review-service
+        ports:
+            - 8081:8081
+        environment:
+            - MONGODB_HOST=movies-mongodb
+        container_name: movies-review-service
+        depends_on:
+            - movies-mongodb
+
+    movies-service:
+        build:
+            dockerfile: ./Dockerfile
+            context: ./movies-service
+        ports:
+            - 8082:8082
+        environment:
+            - MOVIES_INFO_HOST=movies-info-service
+            - MOVIES_REVIEWS_HOST=movies-review-service
+        container_name: movies-service
+        depends_on:
+            - movies-review-service
+            - movies-info-service

@@ -11,7 +11,7 @@ spring:
                 - local
     data:
         mongodb:
-            host: localhost
+            host: ${MONGODB_HOST:localhost}
             port: 27017
             database: local
             
