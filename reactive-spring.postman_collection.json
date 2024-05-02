@@ -1,0 +1,264 @@
+{
+	"info": {
+		"_postman_id": "14385b01-5647-4262-861e-6224ce7ec99d",
+		"name": "Reactive-Spring",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5756593"
+	},
+	"item": [
+		{
+			"name": "MoviesInfo",
+			"item": [
+				{
+					"name": "List Movies Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{MOVIES_INFO_API_URL}}",
+							"host": [
+								"{{MOVIES_INFO_API_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Movie Info By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{MOVIES_INFO_API_URL}}/1",
+							"host": [
+								"{{MOVIES_INFO_API_URL}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Movie Info",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"movieInfoId\": \"1\",\n    \"name\": \"Movie 001\",\n    \"year\": 2024,\n    \"cast\": [\n        \"Actor 001\",\n        \"Actor 002\",\n        \"Actor 003\"\n    ],\n    \"release_date\": \"2024-05-02\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{MOVIES_INFO_API_URL}}",
+							"host": [
+								"{{MOVIES_INFO_API_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Movie Info",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Movie 001\",\n    \"year\": 2024,\n    \"cast\": [\n        \"Actor 001\",\n        \"Actor 002\",\n        \"Actor 003\",\n        \"Actor 004\"\n    ],\n    \"release_date\": \"2024-05-01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{MOVIES_INFO_API_URL}}/1",
+							"host": [
+								"{{MOVIES_INFO_API_URL}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Movie Info",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{MOVIES_INFO_API_URL}}/1",
+							"host": [
+								"{{MOVIES_INFO_API_URL}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MoviesReview",
+			"item": [
+				{
+					"name": "List Reviews By MovieId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{MOVIES_REVIEW_API_URL}}?movieInfoId=1",
+							"host": [
+								"{{MOVIES_REVIEW_API_URL}}"
+							],
+							"query": [
+								{
+									"key": "movieInfoId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reviewId\": \"rv-001\",\n    \"movieInfoId\": 1,\n    \"comment\": \"Cool Movie\",\n    \"rating\": 8.5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{MOVIES_REVIEW_API_URL}}",
+							"host": [
+								"{{MOVIES_REVIEW_API_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"comment\": \"Amazing Movie\",\n    \"rating\": 9.9\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{MOVIES_REVIEW_API_URL}}/rv-001",
+							"host": [
+								"{{MOVIES_REVIEW_API_URL}}"
+							],
+							"path": [
+								"rv-001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{MOVIES_REVIEW_API_URL}}/rv-001",
+							"host": [
+								"{{MOVIES_REVIEW_API_URL}}"
+							],
+							"path": [
+								"rv-001"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movies",
+			"item": [
+				{
+					"name": "Get Movie By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{MOVIES_URL}}/1",
+							"host": [
+								"{{MOVIES_URL}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "MOVIES_INFO_API_URL",
+			"value": "http://localhost:8080/v1/movieinfos",
+			"type": "string"
+		},
+		{
+			"key": "MOVIES_REVIEW_API_URL",
+			"value": "http://localhost:8081/v1/reviews",
+			"type": "string"
+		},
+		{
+			"key": "MOVIES_URL",
+			"value": "http://localhost:8082/v1/movies",
+			"type": "string"
+		}
+	]
+}
